@@ -1,17 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 {% if video %}
-
 <h1 class="pt-4">{{ video.name }}</h1>
-
 <p>{{ video.transcoded_text }}</p>
-
-{% else %}
-
 {% endif %}
-{% endblock %}
-
-{% block script %}
 
 {% endblock %}
