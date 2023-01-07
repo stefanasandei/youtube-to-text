@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="pt-4">{% block title %} YouTube to Text {% endblock %}</h1>
+
+    <form method="POST" action='/video' class="mt-4" id="submit-video">
+      <div class="form-group">
+        <label for="url">Video URL</label>
+        <input type="text" class="form-control" name="url" placeholder="Paste here the video link">
+      </div>
+      <small id="emailHelp" class="form-text text-muted mb-2">
+        We'll be done in a couple of minutes, depending on the video's length.
+      </small>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% if new_video %}
+      <p>The video is being processed! Refresh the page when done.</p>
+    {% endif %}
+
+    {% if videos %}
+    <div class="mt-5">
+      <h4>Videos already transcribed:</h4>
+      <div class="videos-grid">
+        {% for i in range(0, videos|length) %}
+        <div class="pt-3">
+          <div class="card" onclick="goto_video('{{ videos[i].id }}')" style="width: 18rem;">
+            <img class="card-img-top" src="{{ videos[i].thumbnail }}" alt="Card image cap">
+            <div class="card-body">
+              <p class="card-text">{{ videos[i].name }}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block script %}
+<style>
+.card:hover {
+  cursor: pointer;
+}
+.videos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+@media only screen and (max-width: 600px) {
+  .videos-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+<script>
+  const goto_video = (id) => {
+    window.location = `/video?id=${id}`;
+  }
+
+  const validate = (event) => {
+    const youtube_regex = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/;
+    const url = $("[name=url]").val();
+    if(!url.match(youtube_regex)) {
+      event.preventDefault();
+      alert("Invalid YouTube link!");
+    }
+  };
+
+  $("#submit-video").submit((event) => {
+    validate(event);
+  })
+</script>
+{% endblock %}

@@ -1,1 +1,4 @@
-test.py
+__pycache__/
+*.py[cod]
+*.mp3
+*.db
