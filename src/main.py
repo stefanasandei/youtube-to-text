@@ -91,6 +91,14 @@ def upload_video(url):
         session.add(new_video)
         session.commit()
 
+@app.route("/ping")
+def everything_is_ok():
+    assert(app != None)
+    assert(connection != None)
+    assert(whisper_model != None)
+
+    return "pong"
+
 def init():
     generate_schema()
     return app
